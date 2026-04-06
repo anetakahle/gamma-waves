@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Retro Planet Explorer – No Categories, Toggle Legend</title>
+<title>My Galaxy – Personal Mind Map</title>
 <style>
     body { margin: 0; overflow: hidden; background: black; font-family: monospace; }
     .project-label {
@@ -74,7 +74,7 @@
 </head>
 <body>
 <div id="legend">
-<b>Retro Planet Explorer</b><br>
+<b>My Galaxy</b><br>
 W/A/S/D: Move<br>
 Z: Toggle all labels<br>
 X: Show/hide description<br>
@@ -87,116 +87,194 @@ C: Toggle this panel<br>
 <div id="description-popup"></div>
 <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
 <script>
-// ==== Projects, Descriptions ====
-const projectData = [
-    {name:"Inforganic Codex", desc:"A structured knowledge system blending organic cognition with inorganic computation."},
-    {name:"Aspect Relegation Theory", desc:"Framework for distributing cognitive load by shifting aspects of thought to peripheral systems."},
-    {name:"Inforganic Wildtype Ecosystem", desc:"Simulation of hybrid digital-biological minds evolving in shared environments."},
-    {name:"Trodden Path Mind", desc:"Cognitive model based on reinforcement from repeated neural and behavioral pathways."},
-    {name:"Relegated Mind", desc:"Concept of outsourcing entire mental functions to external agents or systems."},
-    {name:"Living Mind", desc:"Mind as a self-sustaining ecosystem of interacting sub-agents."},
-    {name:"Semantic Ladle Theory", desc:"Mechanism for scooping, redistributing, and mixing meaning across contexts."},
-    {name:"SITH", desc:"Theory of cognition persisting regardless of material substrate."},
-    {name:"Geometric Bayesianism with Sparse Heuristics", desc:"Geometric framework for probabilistic reasoning with minimal heuristics."},
-    {name:"Ergodic Mind Medication", desc:"Applying ergodic theory to stabilize mental states across time."},
-    {name:"Glass Mind", desc:"A transparent cognitive model where every process is observable but fragile."},
-    {name:"Forest Mind", desc:"Networked consciousness modeled on interlinked trees and fungal root systems."},
-    {name:"Dynamic Mind", desc:"Mind as a constantly adapting, non-equilibrium dynamical system."},
-    {name:"Pattern Generalizer Neuron", desc:"Hypothetical neuron optimized for abstraction across domains."},
-    {name:"Swarm Syntax System", desc:"Grammar emerging from multi-agent coordination."},
-    {name:"Semantic Metabolism", desc:"The intake, breakdown, and recombination of meaning as a metabolic process."},
-    {name:"Reflex Arc Logistics Manager", desc:"Cognitive subsystem for routing quick responses efficiently."},
-    {name:"Idiomatic Drift Tracker", desc:"Tool to follow shifts in language and expression over time."},
-    {name:"Neurofungal Network Simulator", desc:"Model of fungal-like cognitive connections for decentralized processing."},
-    {name:"Conceptual Metabolism Engine", desc:"A formal system that processes, transforms, and excretes ideas like nutrients."},
-    {name:"RSVP Theory", desc:"Relativistic Scalar Vector Plenum: an entropic cosmology replacing expansion with smoothing."},
-    {name:"Crystal Plenum Theory", desc:"Universe as crystallized plenum with structured lattice energy."},
-    {name:"Lamphron & Lamphrodyne States", desc:"Exotic energy states bridging entropy and order."},
-    {name:"5D Ising Synchronization Model", desc:"Multidimensional Ising model for cosmic coherence."},
-    {name:"Neutrino Fossil Registry", desc:"Catalog of ancient neutrino imprints as cosmic memory."},
-    {name:"Deferred Thermodynamic Reservoirs", desc:"Hypothesis of hidden entropy reservoirs delaying dissipation."},
-    {name:"Poincaré Lattice Recrystallization", desc:"Universe undergoing cyclic lattice resets."},
-    {name:"Scalar Irruption via Entropic Differential", desc:"Sudden scalar field emergence driven by entropy imbalance."},
-    {name:"Inflaton Field Embedding", desc:"RSVP embedding of inflaton-like scalar fields."},
-    {name:"Universe-as-Sponge Cosmology", desc:"Universe modeled as porous medium absorbing and redistributing energy."},
-    {name:"Cyclex Climate Stabilization Architecture", desc:"Feedback-driven geoengineering for balanced climate cycles."},
-    {name:"Volsorial Pediments", desc:"Geological structures for energy storage and terraforming."},
-    {name:"Gravitational Batteries", desc:"Power generation through controlled gravity wells."},
-    {name:"Polar Nuclear Refrigerators", desc:"Devices to refreeze melting poles with nuclear cooling."},
-    {name:"Orthodromic Rivers System", desc:"Engineered rivers optimized for shortest flow paths."},
-    {name:"Vertical Rainforest Trellises", desc:"Sky-reaching rainforest habitats on trellis towers."},
-    {name:"Terra Preta Engineered Soil Layering", desc:"Artificial soil ecosystems for fertility and carbon capture."},
-    {name:"Oceanic Kelp Parachutes", desc:"Floating kelp systems stabilizing climate and supporting ecosystems."},
-    {name:"Intervolsorial Infrastructure Grids", desc:"Network of terraforming infrastructure across regions."},
-    {name:"Geozotic Power Systems", desc:"Hybrid geological-biological energy harvesters."},
-    {name:"GAIACRAFT", desc:"Civilization evolution engine simulating planetary societies."},
-    {name:"Hyperplural Divergence Core", desc:"Framework for modeling diverging cultural timelines."},
-    {name:"Behavioral Wetware Loop", desc:"Feedback model of human-machine behavioral cycles."},
-    {name:"EvoGlyph Symbolic Language", desc:"Evolutionary symbolic language generator."},
-    {name:"Recursive Narrative Layer", desc:"Self-referential storytelling engine."},
-    {name:"Stars!-Inspired Epistemic Scouting", desc:"Knowledge-exploration modeled on 4X space games."},
-    {name:"Constraint-Driven Memetic Drift Simulator", desc:"Memetic change under systemic constraints."},
-    {name:"Myth-Biological Governance Systems", desc:"Political systems modeled on myth and biology."},
-    {name:"Cymatic Yogurt Computer", desc:"Acoustic-computational system using fluid vibrations."},
-    {name:"Magnetic Fluidic Computer", desc:"Analog computation with ferrofluids."},
-    {name:"Codex Singularis", desc:"Singular philosophical codex for all systems."},
-    {name:"The Yarnball Earth Book", desc:"Earth as tangled narrative threads."},
-    {name:"Motile Womb Theory", desc:"Ontology of womb as moving, generative site."},
-    {name:"Lunar-Notch Divine Continuum", desc:"Sacred cycles marked by lunar irregularities."},
-    {name:"Tawḥīd-Gödel Paradox Synthesis", desc:"Synthesis of divine unity and incompleteness."},
-    {name:"Biblical Cloak Motif Framework", desc:"Symbolism of cloaks as interpretive device."},
-    {name:"Negative-Space Signature Theory", desc:"Identities defined by what is absent."},
-    {name:"Semantic Cloak/Residue Indexing", desc:"Catalog of hidden or leftover meanings."},
-    {name:"Gospel of Cognitive Snake Oil", desc:"Satirical critique of pseudoscience."},
-    {name:"Semantic Intertextuality Map", desc:"Linking texts via semantic overlaps."},
-    {name:"Womb Body Bioforge", desc:"Biotech device for body regeneration."},
-    {name:"Mechatronic Diapers", desc:"Responsive, sensor-equipped care systems."},
-    {name:"Thermovariable Membrane Clothing", desc:"Adaptive clothing for climate regulation."},
-    {name:"Ontological Dishwasher", desc:"Device cleaning symbolic as well as physical residue."},
-    {name:"Fractal Brain Keel", desc:"Structural support for brain-like computation."},
-    {name:"Semi-Automatic Bread Slicer", desc:"Playful precision tool for slicing bread."},
-    {name:"Spindle Womb Recorder", desc:"Device for recording generative events."},
-    {name:"Hyperdense Scroll Printer", desc:"Printer producing ultra-condensed scrolls."},
-    {name:"Womb Sound Synth Interface", desc:"Synthesizer based on biological signals."},
-    {name:"Emotion-Sorted Document Organizer", desc:"Filing system categorizing by affect."},
-    {name:"Peritellurian Geozotic Technium", desc:"Global-scale techno-bio infrastructure."},
-    {name:"Holistic Anocracy", desc:"Hybrid governance beyond autocracy/democracy."},
-    {name:"Oblicosm Doctrine", desc:"Oblique world-order philosophy."},
-    {name:"Uber-Draconianism", desc:"Extreme regulatory governance."},
-    {name:"Cyclofabian Urban Charter", desc:"Circular economy-based urbanism."},
-    {name:"Flux Sphere Accord", desc:"Treaty framework for flux-based societies."},
-    {name:"AI Ethics via Dinim Scaffold", desc:"Jewish law-inspired ethical framework for AI."},
-    {name:"Postcapitalist Room-Build Protocol", desc:"Alternative economic architecture via shared spaces."},
-    {name:"Hierarchically Gated Usufruct Access", desc:"Structured access to common goods."},
-    {name:"Fractal Labor Encoding System", desc:"Work modeled as fractal tasks."},
-    {name:"Flyxion", desc:"Eco-poetic music project."},
-    {name:"Hydrolysis", desc:"Music track/theme on dissolution and recombination."},
-    {name:"Standard Galactic Alphabet Decoding", desc:"Deciphering symbolic alphabets."},
-    {name:"Arabic Phonetic Keyboard", desc:"Phonetic-friendly input method."},
-    {name:"SpherePop Typing Tutor", desc:"Playful typing training system."},
-    {name:"Earth Cube Translator", desc:"Conceptual translation of Earth systems."},
-    {name:"SGA Spell Syntax", desc:"Language rules inspired by Minecraft alphabet."},
-    {name:"Semantic Layered Translation Engines", desc:"Multi-layer translation framework."},
-    {name:"Lexical Compression Rituals", desc:"Ritualistic reduction of language into minimal forms."},
-    {name:"Musical Reflex Conditioning Systems", desc:"Conditioning cognition via sound."},
-    {name:"99 Ways to Make a Paper Globe", desc:"Playful manual for paper worldmaking."},
-    {name:"Scapelambda Quadrilateral", desc:"Narrative engine shaped as a quadrilateral."},
-    {name:"Purple Pill Mythos & One-Eyed Pill Eater", desc:"Satirical myth critique."},
-    {name:"Lavender Planet Symbolic World", desc:"World-model colored by lavender aesthetics."},
-    {name:"Recursive Cloakproof Chain Generator", desc:"Infinite symbolic protection generator."},
-    {name:"ABRAXAS: Riddle Engine and Archive", desc:"Engine for riddles and mystical archives."},
-    {name:"Codex Scroll Artifact Generator", desc:"Tool for creating codex-like scrolls."},
-    {name:"Mythopoetic Trading Card System", desc:"Myth-based collectible system."},
-    {name:"Paper Straw Ion Channel Analogy", desc:"Educational tool for bioelectricity."},
-    {name:"Post-Theological Acrostic Converter", desc:"Generator for coded theological texts."}
+// ==== My Galaxy: central node, five categories, leaf topics ====
+// group: 0 = center, 1–5 = category (shared planet color per category)
+const CATEGORY_GROUP_COLORS = {
+    0: 0xffee88,
+    1: 0xcc88ff,
+    2: 0xff6699,
+    3: 0x66ddff,
+    4: 0xffcc44,
+    5: 0x88aaff
+};
+
+const galaxyTree = [
+    {
+        title: "🧠 Inner World & Psyche",
+        desc: "Inner life, emotions, regulation, and how you relate to yourself.",
+        items: [
+            "Navigating Sadness",
+            "Managing PTSD & Anxiety",
+            "Emotional Regulation",
+            "Self-Worth",
+            "Self-Acceptance",
+            "Inner Peace vs. Chaos",
+            "Overthinking",
+            "The Inner Critic",
+            "Sense of Control",
+            "Fear of Rejection"
+        ]
+    },
+    {
+        title: "❤️ Relationships & Communication",
+        desc: "Connection, boundaries, trust, and how you show up with others.",
+        items: [
+            "Texting Dynamics (Tone & Wording)",
+            "Setting Boundaries",
+            "Fear of Messing Up",
+            "Apologies & Forgiveness",
+            "Reading People's Signals",
+            "Authenticity vs. Conformity",
+            "Conflict Resolution",
+            "Emotional Independence",
+            "Building Trust",
+            "Knowing When to Reach Out"
+        ]
+    },
+    {
+        title: "💼 Work & Leadership",
+        desc: "Leading, delegating, feedback, and pressure at work.",
+        items: [
+            "Delegating Effectively",
+            "Guiding Underperformers",
+            "Fairness vs. Efficiency",
+            "Handling Poor Quality Work",
+            "Setting Clear Expectations",
+            "Giving & Receiving Feedback",
+            "Authority vs. Likability",
+            "Team Responsibility",
+            "Decision Making Under Pressure",
+            "Leadership Growth"
+        ]
+    },
+    {
+        title: "⚡ Performance & Energy",
+        desc: "Energy, habits, focus, and sustainable effort.",
+        items: [
+            "Sleep vs. Discipline",
+            "Pushing vs. Slowing Down",
+            "Preventing Burnout",
+            "Productivity vs. Well-being",
+            "Gym & Physical Energy",
+            "Routines & Habits",
+            "Focus vs. Distraction",
+            "Working with Fatigue",
+            "Motivation vs. Discipline",
+            "Time Management"
+        ]
+    },
+    {
+        title: "🪞 Self-Image & Identity",
+        desc: "How you see yourself, present, and grow into who you are.",
+        items: [
+            "How I Come Across",
+            "Physical Appearance & Image",
+            "Confidence in Communication",
+            "Imposter Syndrome",
+            "Identity: Tech Lead vs. Human",
+            "Perfectionism",
+            "Comparing Myself to Others",
+            "My Standards vs. Reality",
+            "Core Authenticity",
+            "Self-Discovery & Direction"
+        ]
+    }
 ];
 
-// Color by index (not shown in labels, but keeps planets visually distinct)
-function indexColor(idx) {
-    // Pick from green range, but add some variance for visual distinction
-    const base = 0x00ff00;
-    const variance = ((idx * 47) % 0x80) << 8; // varies green channel
-    return base - variance;
+function buildProjectData() {
+    const nodes = [];
+    const links = [];
+    let idx = 0;
+    const centerIndex = idx;
+    nodes.push({
+        name: "My Galaxy",
+        desc: "Your personal map: five life areas and the topics you care about within each.",
+        group: 0,
+        kind: "center",
+        radius: 48
+    });
+    idx++;
+
+    galaxyTree.forEach((cat, catNum) => {
+        const group = catNum + 1;
+        const catIdx = idx;
+        nodes.push({
+            name: cat.title,
+            desc: cat.desc,
+            group,
+            kind: "category",
+            radius: 36
+        });
+        links.push([centerIndex, catIdx]);
+        idx++;
+
+        cat.items.forEach((itemName) => {
+            const leafIdx = idx;
+            nodes.push({
+                name: itemName,
+                desc: `A focus area within ${cat.title}.`,
+                group,
+                kind: "leaf",
+                radius: 24
+            });
+            links.push([catIdx, leafIdx]);
+            idx++;
+        });
+    });
+
+    return { nodes, links };
+}
+
+const { nodes: projectData, links: graphLinks } = buildProjectData();
+
+function groupColor(group) {
+    return CATEGORY_GROUP_COLORS[group] ?? 0x00ff00;
+}
+
+function layoutGalaxy(nodes, links) {
+    const center = new THREE.Vector3(0, 0, -2600);
+    const categoryRingR = 1900;
+    const leafRingR = 520;
+    const categoryIndices = [];
+    nodes.forEach((n, i) => {
+        if (n.kind === "center") {
+            n.position = center.clone();
+        } else if (n.kind === "category") {
+            categoryIndices.push(i);
+        }
+    });
+    categoryIndices.forEach((nodeIndex, c) => {
+        const angle = (c / categoryIndices.length) * Math.PI * 2 - Math.PI / 2;
+        const n = nodes[nodeIndex];
+        n.position = new THREE.Vector3(
+            center.x + categoryRingR * Math.cos(angle),
+            center.y + categoryRingR * Math.sin(angle),
+            center.z + Math.sin(angle * 1.7) * 220
+        );
+    });
+    const leavesByCategory = new Map();
+    links.forEach(([a, b]) => {
+        const na = nodes[a];
+        const nb = nodes[b];
+        if (na.kind === "category" && nb.kind === "leaf") {
+            if (!leavesByCategory.has(a)) leavesByCategory.set(a, []);
+            leavesByCategory.get(a).push(b);
+        }
+    });
+    leavesByCategory.forEach((leafIdxs, catIdx) => {
+        const catPos = nodes[catIdx].position;
+        const count = leafIdxs.length;
+        leafIdxs.forEach((leafIdx, j) => {
+            const t = (j / count) * Math.PI * 2;
+            const bump = (j * 2.17) % 1;
+            const r = leafRingR * (0.82 + 0.18 * bump);
+            nodes[leafIdx].position = new THREE.Vector3(
+                catPos.x + r * Math.cos(t),
+                catPos.y + r * Math.sin(t) * 0.85,
+                catPos.z + 140 * Math.sin(t * 1.3)
+            );
+        });
+    });
 }
 
 // ==== Scene Setup ====
@@ -221,23 +299,40 @@ const starMaterial = new THREE.PointsMaterial({ color: 0x003300, size: 2 });
 const stars = new THREE.Points(starGeometry, starMaterial);
 scene.add(stars);
 
+layoutGalaxy(projectData, graphLinks);
+
+// Hierarchy edges (center ↔ categories ↔ leaves)
+const linkVerts = new Float32Array(graphLinks.length * 6);
+graphLinks.forEach(([from, to], li) => {
+    const a = projectData[from].position;
+    const b = projectData[to].position;
+    const o = li * 6;
+    linkVerts[o] = a.x; linkVerts[o + 1] = a.y; linkVerts[o + 2] = a.z;
+    linkVerts[o + 3] = b.x; linkVerts[o + 4] = b.y; linkVerts[o + 5] = b.z;
+});
+const linkGeometry = new THREE.BufferGeometry();
+linkGeometry.setAttribute('position', new THREE.BufferAttribute(linkVerts, 3));
+const linkMaterial = new THREE.LineBasicMaterial({
+    color: 0x1a6633,
+    transparent: true,
+    opacity: 0.5
+});
+const linkLines = new THREE.LineSegments(linkGeometry, linkMaterial);
+scene.add(linkLines);
+
 // Planets & Labels
 const planets = [];
 const labels = [];
 projectData.forEach((p, idx) => {
-    const geo = new THREE.SphereGeometry(25,12,12);
-    const mat = new THREE.MeshBasicMaterial({color:indexColor(idx)});
+    const r = p.radius != null ? p.radius : 25;
+    const geo = new THREE.SphereGeometry(r, 12, 12);
+    const mat = new THREE.MeshBasicMaterial({ color: groupColor(p.group) });
     const planet = new THREE.Mesh(geo, mat);
-    planet.position.set(
-        Math.random()*8000-4000,
-        Math.random()*8000-4000,
-        Math.random()*-8000
-    );
-    planet.userData = {...p, index: idx};
+    planet.position.copy(p.position);
+    planet.userData = { ...p, index: idx };
     scene.add(planet);
     planets.push(planet);
 
-    // Overhead label
     const label = document.createElement('div');
     label.className = 'project-label';
     label.innerText = p.name;
@@ -304,7 +399,7 @@ function updateDescriptionPopup() {
         descPopup.style.display = "none";
     } else {
         const p = projectData[selectedIndex];
-        descPopup.textContent = `${p.name}\n\n${p.desc}`;
+        descPopup.textContent = p.desc ? `${p.name}\n\n${p.desc}` : p.name;
         descPopup.style.display = "block";
     }
 }
@@ -323,9 +418,9 @@ function animate(){
     // Position labels overhead
     if(labelsVisible) {
         planets.forEach((planet, i) => {
-            // Overhead world position
+            const r = planet.geometry.parameters.radius;
             const worldPos = planet.position.clone();
-            worldPos.y += 35;
+            worldPos.y += r + 12;
             const screenPos = worldPos.project(camera);
             const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
             const y = (-screenPos.y * 0.5 + 0.5) * window.innerHeight;
@@ -337,8 +432,9 @@ function animate(){
         });
         // Amber highlight for selected
         const planet = planets[selectedIndex];
+        const rSel = planet.geometry.parameters.radius;
         const worldPos = planet.position.clone();
-        worldPos.y += 35;
+        worldPos.y += rSel + 12;
         const screenPos = worldPos.project(camera);
         amberCircle.style.left = `${(screenPos.x * 0.5 + 0.5) * window.innerWidth - amberCircle.offsetWidth/2}px`;
         amberCircle.style.top = `${(-screenPos.y * 0.5 + 0.5) * window.innerHeight - amberCircle.offsetHeight - 12}px`;
