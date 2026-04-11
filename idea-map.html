@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <title>My Galaxy – Personal Mind Map</title>
 <style>
-    body { margin: 0; overflow: hidden; background: black; font-family: monospace; }
+    body { margin: 0; overflow: hidden; background: #070015; font-family: monospace; }
     .project-label {
         position: absolute;
-        color: #00ff00;
+        color: #c8a8ff;
         font-size: 14px;
         pointer-events: none;
-        background: rgba(0,0,0,0.8);
+        background: rgba(7,0,21,0.88);
         padding: 2px 8px;
         border-radius: 4px;
         display: none;
@@ -27,9 +27,9 @@
         transform: translateX(-50%);
         min-width: 300px;
         max-width: 600px;
-        background: rgba(20,20,10,0.98);
-        color: #ffd060;
-        border: 2px solid #ffaa40;
+        background: rgba(10,5,30,0.98);
+        color: #e8c8ff;
+        border: 2px solid #9955dd;
         border-radius: 8px;
         padding: 16px 18px;
         font-size: 16px;
@@ -44,8 +44,8 @@
         position: absolute;
         left: 14px;
         top: 12px;
-        background: rgba(0,0,0,0.85);
-        color: #00ff00;
+        background: rgba(7,0,21,0.88);
+        color: #c8a8ff;
         border-radius: 7px;
         padding: 10px 16px;
         font-size: 14px;
@@ -53,7 +53,7 @@
         z-index: 30;
         max-width: 320px;
         line-height: 1.7;
-        border: 1px solid #0a0;
+        border: 1px solid #7733cc;
         box-shadow: 0 2px 12px #000;
         letter-spacing: 0.02em;
         transition: opacity 0.2s;
@@ -64,8 +64,8 @@
         width: 56px;
         height: 56px;
         border-radius: 50%;
-        border: 3px solid #ffd060;
-        box-shadow: 0 0 18px #ffd06080;
+        border: 3px solid #c8a8ff;
+        box-shadow: 0 0 18px #c8a8ff80;
         background: none;
         z-index: 15;
         display: none;
@@ -90,45 +90,102 @@ C: Toggle this panel<br>
 // ==== My Galaxy: central node, five categories, leaf topics ====
 // group: 0 = center, 1–5 = category (shared planet color per category)
 const CATEGORY_GROUP_COLORS = {
-    0: 0xffee88,
-    1: 0xcc88ff,
-    2: 0xff6699,
-    3: 0x66ddff,
-    4: 0xffcc44,
-    5: 0x88aaff
+    0: 0xffd700,  // center – warm gold
+    1: 0xaa55ff,  // Soul & Consciousness – deep violet
+    2: 0xff77aa,  // Love & Connection – warm rose
+    3: 0x44cc88,  // Purpose & Creation – emerald
+    4: 0x88cc44,  // Body & Nature – forest green
+    5: 0x44cccc,  // Healing & Integration – teal
+    6: 0xffaa44   // Work & Leadership – warm amber
 };
 
 const galaxyTree = [
     {
-        title: "🧠 Inner World & Psyche",
-        desc: "Inner life, emotions, regulation, and how you relate to yourself.",
+        title: "✨ Soul & Consciousness",
+        desc: "Relating to your own soul, intuition, and expanded states of awareness.",
         items: [
-            "Navigating Sadness",
-            "Managing PTSD & Anxiety",
-            "Emotional Regulation",
-            "Self-Worth",
-            "Self-Acceptance",
-            "Inner Peace vs. Chaos",
-            "Overthinking",
-            "The Inner Critic",
-            "Sense of Control",
-            "Fear of Rejection"
+            "What My Soul Needs",
+            "Listening to My Inner Voice",
+            "Trusting Intuition",
+            "Relationship with My Higher Self",
+            "States of Consciousness & Expansion",
+            "Dreams and Visions",
+            "Meditation & Silence",
+            "Surrendering to the Flow",
+            "Connection with the Spiritual World",
+            "The Path of Awakening"
         ]
     },
     {
-        title: "❤️ Relationships & Communication",
-        desc: "Connection, boundaries, trust, and how you show up with others.",
+        title: "💗 Love & Connection",
+        desc: "Sharing love freely, deep presence, and heart-to-heart connection with others.",
         items: [
-            "Texting Dynamics (Tone & Wording)",
-            "Setting Boundaries",
-            "Fear of Messing Up",
-            "Apologies & Forgiveness",
-            "Reading People's Signals",
-            "Authenticity vs. Conformity",
-            "Conflict Resolution",
-            "Emotional Independence",
-            "Building Trust",
-            "Knowing When to Reach Out"
+            "Sharing Love Without Conditions",
+            "Love Without Fear",
+            "Deep Listening",
+            "Forgiveness as Liberation",
+            "Authentic Meeting with Others",
+            "Vulnerability as Strength",
+            "Empathy & Compassion",
+            "Presence in Relationships",
+            "Heart-to-Heart Connection",
+            "Community & Belonging",
+            "Connecting with People",
+            "Creating Friendships",
+            "Kindness and Offering Help",
+            "True Kindness"
+        ]
+    },
+    {
+        title: "🌱 Purpose & Creation",
+        desc: "Why I am here, what I create, and how I contribute to the world.",
+        items: [
+            "Why I Am Here – My Mission",
+            "The Art of Solitude and Calm",
+            "Leading from Love",
+            "Contribution vs. Achievement",
+            "Creative Flow",
+            "Sharing Gifts and Knowledge",
+            "Meaningful Work",
+            "Serving Others",
+            "Sustainable Creation",
+            "Living an Authentic Mission"
+        ]
+    },
+    {
+        title: "🌿 Body & Nature",
+        desc: "Body wisdom, love of nature, and living in harmony with natural rhythms.",
+        items: [
+            "Listening to Body Wisdom",
+            "Loving Nature",
+            "Natural Rhythms and Cycles",
+            "Plant Wisdom",
+            "Somatic Awareness",
+            "Rest & Renewal",
+            "Earth Connection",
+            "Breath as Medicine",
+            "Sensory Presence",
+            "Self-Care as Sacred Practice",
+            "Exploring the Underwater World",
+            "Diving",
+            "Korean Beauty",
+            "Natural Beauty"
+        ]
+    },
+    {
+        title: "🌀 Healing & Integration",
+        desc: "Integrating transformative experiences, releasing old patterns, and embracing wholeness.",
+        items: [
+            "Integrating Insights",
+            "Releasing Old Patterns",
+            "The Shadow as Teacher",
+            "Embracing Wholeness",
+            "Working with Fear",
+            "From Trauma to Wisdom",
+            "Self-Compassion",
+            "Grounding After Expansion",
+            "Honoring All Parts of Self",
+            "The Ongoing Healing Journey"
         ]
     },
     {
@@ -146,38 +203,6 @@ const galaxyTree = [
             "Decision Making Under Pressure",
             "Leadership Growth"
         ]
-    },
-    {
-        title: "⚡ Performance & Energy",
-        desc: "Energy, habits, focus, and sustainable effort.",
-        items: [
-            "Sleep vs. Discipline",
-            "Pushing vs. Slowing Down",
-            "Preventing Burnout",
-            "Productivity vs. Well-being",
-            "Gym & Physical Energy",
-            "Routines & Habits",
-            "Focus vs. Distraction",
-            "Working with Fatigue",
-            "Motivation vs. Discipline",
-            "Time Management"
-        ]
-    },
-    {
-        title: "🪞 Self-Image & Identity",
-        desc: "How you see yourself, present, and grow into who you are.",
-        items: [
-            "How I Come Across",
-            "Physical Appearance & Image",
-            "Confidence in Communication",
-            "Imposter Syndrome",
-            "Identity: Tech Lead vs. Human",
-            "Perfectionism",
-            "Comparing Myself to Others",
-            "My Standards vs. Reality",
-            "Core Authenticity",
-            "Self-Discovery & Direction"
-        ]
     }
 ];
 
@@ -188,7 +213,7 @@ function buildProjectData() {
     const centerIndex = idx;
     nodes.push({
         name: "My Galaxy",
-        desc: "Your personal map: five life areas and the topics you care about within each.",
+        desc: "Your map after transformation: five new dimensions of being.",
         group: 0,
         kind: "center",
         radius: 48
@@ -295,7 +320,7 @@ for (let i = 0; i < starCount; i++) {
     starPositions[i*3+2] = Math.random() * -10000;
 }
 starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-const starMaterial = new THREE.PointsMaterial({ color: 0x003300, size: 2 });
+const starMaterial = new THREE.PointsMaterial({ color: 0x5533aa, size: 1.5 });
 const stars = new THREE.Points(starGeometry, starMaterial);
 scene.add(stars);
 
@@ -313,9 +338,9 @@ graphLinks.forEach(([from, to], li) => {
 const linkGeometry = new THREE.BufferGeometry();
 linkGeometry.setAttribute('position', new THREE.BufferAttribute(linkVerts, 3));
 const linkMaterial = new THREE.LineBasicMaterial({
-    color: 0x1a6633,
+    color: 0x7733cc,
     transparent: true,
-    opacity: 0.5
+    opacity: 0.35
 });
 const linkLines = new THREE.LineSegments(linkGeometry, linkMaterial);
 scene.add(linkLines);
@@ -407,6 +432,10 @@ function updateDescriptionPopup() {
 // Animate
 function animate(){
     requestAnimationFrame(animate);
+
+    // Slowly rotate starfield
+    stars.rotation.y += 0.00008;
+    stars.rotation.x += 0.00004;
 
     // Camera controls
     if(keys['w']) camera.position.z -= 30;
