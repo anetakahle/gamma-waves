@@ -351,7 +351,7 @@ const labels = [];
 projectData.forEach((p, idx) => {
     const r = p.radius != null ? p.radius : 25;
     const geo = new THREE.SphereGeometry(r, 12, 12);
-    const mat = new THREE.MeshBasicMaterial({ color: groupColor(p.group) });
+    const mat = new THREE.MeshBasicMaterial({ color: groupColor(p.group), transparent: p.kind === 'leaf' });
     const planet = new THREE.Mesh(geo, mat);
     planet.position.copy(p.position);
     planet.userData = { ...p, index: idx };
@@ -363,6 +363,14 @@ projectData.forEach((p, idx) => {
     label.innerText = p.name;
     document.body.appendChild(label);
     labels.push(label);
+});
+
+// LOD: map each leaf index → its parent category's position
+const leafParentPos = new Array(projectData.length).fill(null);
+graphLinks.forEach(([from, to]) => {
+    if (projectData[from].kind === 'category' && projectData[to].kind === 'leaf') {
+        leafParentPos[to] = projectData[from].position;
+    }
 });
 
 // Amber Highlight Circle
@@ -444,6 +452,22 @@ function animate(){
     if(keys['d']) camera.position.x += 30;
     camera.updateProjectionMatrix();
 
+    // LOD: fade leaf nodes in/out based on distance to parent category
+    const LOD_FAR = 2200;
+    const LOD_NEAR = 1200;
+    projectData.forEach((p, i) => {
+        if (p.kind === 'leaf') {
+            const parentPos = leafParentPos[i];
+            const dist = parentPos ? camera.position.distanceTo(parentPos) : Infinity;
+            if (dist > LOD_FAR) {
+                planets[i].visible = false;
+            } else {
+                planets[i].visible = true;
+                planets[i].material.opacity = Math.max(0, Math.min(1, (LOD_FAR - dist) / (LOD_FAR - LOD_NEAR)));
+            }
+        }
+    });
+
     // Position labels overhead
     if(labelsVisible) {
         planets.forEach((planet, i) => {
@@ -455,8 +479,10 @@ function animate(){
             const y = (-screenPos.y * 0.5 + 0.5) * window.innerHeight;
             labels[i].style.left = `${x - labels[i].offsetWidth/2}px`;
             labels[i].style.top = `${y - labels[i].offsetHeight}px`;
-            // Hide if behind camera
-            labels[i].style.opacity = (screenPos.z < 1 && screenPos.z > -1) ? '1' : '0';
+            // Hide if behind camera or LOD-hidden
+            const lodAlpha = planet.userData.kind === 'leaf' ? (planet.material.opacity ?? 1) : 1;
+            labels[i].style.opacity = (screenPos.z < 1 && screenPos.z > -1 && planet.visible)
+                ? String(lodAlpha) : '0';
             labels[i].style.display = 'block';
         });
         // Amber highlight for selected
