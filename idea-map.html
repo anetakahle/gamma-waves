@@ -75,19 +75,27 @@
 <body>
 <div id="legend">
 <b>My Galaxy</b><br>
-W/A/S/D: Move<br>
-Q/E: Up / Down<br>
+🖱️ Drag: rotate<br>
+🖱️ Scroll: zoom<br>
+🖱️ Right-drag: pan<br>
 Z: Toggle all labels<br>
 X: Show/hide description<br>
-H/J: Previous<br>
-L/;: Next<br>
-K: Random<br>
-C: Toggle this panel<br>
+H/J: Previous &middot; L/;: Next<br>
+K: Random &middot; C: Toggle panel<br>
 <small>(Amber circle highlights selected. Try X!)</small>
 </div>
 <div id="description-popup"></div>
-<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
-<script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // ==== My Galaxy: central node, five categories, leaf topics ====
 // group: 0 = center, 1–5 = category (shared planet color per category)
 const CATEGORY_GROUP_COLORS = {
@@ -345,6 +353,19 @@ const renderer = new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+// Mouse controls: drag to rotate, wheel to zoom, right-drag to pan (smooth damping)
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 0, -2600);          // orbit around the galaxy center
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.rotateSpeed = 0.6;
+controls.zoomSpeed = 0.9;
+controls.panSpeed = 0.6;
+controls.minDistance = 250;
+controls.maxDistance = 9000;
+camera.position.set(0, 600, 1700);         // initial framing of the cluster
+controls.update();
+
 // Starfield
 const starGeometry = new THREE.BufferGeometry();
 const starCount = 1000;
@@ -480,14 +501,8 @@ function animate(){
     stars.rotation.y += 0.00008;
     stars.rotation.x += 0.00004;
 
-    // Camera controls
-    if(keys['w']) camera.position.z -= 30;
-    if(keys['s']) camera.position.z += 30;
-    if(keys['a']) camera.position.x -= 30;
-    if(keys['d']) camera.position.x += 30;
-    if(keys['q']) camera.position.y += 30;
-    if(keys['e']) camera.position.y -= 30;
-    camera.updateProjectionMatrix();
+    // Mouse orbit / zoom / pan (with damping)
+    controls.update();
 
     // LOD: fade leaf nodes in/out based on distance to parent category
     const LOD_FAR = 2200;
