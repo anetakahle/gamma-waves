@@ -97,7 +97,9 @@ const CATEGORY_GROUP_COLORS = {
     3: 0x44cc88,  // Purpose & Creation – emerald
     4: 0x88cc44,  // Body & Nature – forest green
     5: 0x44cccc,  // Healing & Integration – teal
-    6: 0xffaa44   // Work & Leadership – warm amber
+    6: 0xffaa44,  // Work & Leadership – warm amber
+    7: 0xff6644,  // Body & Movement – energetic orange-red
+    8: 0xff55cc   // Art & Aesthetics – magenta-pink
 };
 
 const galaxyTree = [
@@ -208,6 +210,31 @@ const galaxyTree = [
             "Decision Making Under Pressure",
             "Leadership Growth"
         ]
+    },
+    {
+        title: "🏔️ Body & Movement",
+        desc: "Strength, endurance, and discipline — finding calm in the chaos, on land and underwater.",
+        items: [
+            "CrossFit",
+            "Running",
+            "Martial Arts",
+            "Scuba Diving",
+            "Endurance & Discipline",
+            "Staying Calm Under Pressure",
+            "Clearing the Mental Cache"
+        ]
+    },
+    {
+        title: "🎨 Art & Aesthetics",
+        desc: "A keen eye for beauty — across fashion, spaces, images, and self-expression.",
+        items: [
+            "Fashion",
+            "Interior Design",
+            "Digital Art",
+            "Modeling",
+            "Visual Storytelling",
+            "A Keen Eye for Beauty"
+        ]
     }
 ];
 
@@ -218,7 +245,7 @@ function buildProjectData() {
     const centerIndex = idx;
     nodes.push({
         name: "My Galaxy",
-        desc: "Your map after transformation: five new dimensions of being.",
+        desc: "A map of my inner world — mind, heart, body, and the things that make me me.",
         group: 0,
         kind: "center",
         radius: 48
