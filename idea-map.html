@@ -100,28 +100,26 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // group: 0 = center, 1–5 = category (shared planet color per category)
 const CATEGORY_GROUP_COLORS = {
     0: 0xffd700,  // center – warm gold
-    1: 0xaa55ff,  // Soul & Consciousness – deep violet
+    1: 0xaa55ff,  // Soul, Consciousness & Integration – deep violet
     2: 0xff77aa,  // Love & Connection – warm rose
     3: 0x44cc88,  // Purpose & Creation – emerald
     4: 0x88cc44,  // Body & Nature – forest green
-    5: 0x44cccc,  // Healing & Integration – teal
-    6: 0xffaa44,  // Work & Leadership – warm amber
-    7: 0xff6644,  // Body & Movement – energetic orange-red
-    8: 0xff55cc,  // Art & Aesthetics – magenta-pink
-    9: 0x6677dd,  // Philosophy – slate blue
-    10: 0x33ccff, // AI & Systems – electric blue
-    11: 0x33ddaa, // Mathematics – mint green
-    12: 0xffcc44, // Business & Independence – warm yellow
-    13: 0xee99bb, // Values & Character – dusty rose
-    14: 0xbb88ee, // Psychology & Sociology – orchid
-    15: 0xcc8866, // Family & Roots – warm sienna
-    16: 0x22ccbb  // Travel & Adventure – turquoise
+    5: 0xffaa44,  // Work & Leadership – warm amber
+    6: 0xff6644,  // Body & Movement – energetic orange-red
+    7: 0xff55cc,  // Art & Aesthetics – magenta-pink
+    8: 0x6677dd,  // Philosophy, Psychology & Sociology – slate blue
+    9: 0x33ccff,  // AI & Systems – electric blue
+    10: 0x33ddaa, // Mathematics – mint green
+    11: 0xffcc44, // Business & Independence – warm yellow
+    12: 0xee99bb, // Values & Character – dusty rose
+    13: 0xcc8866, // Family & Roots – warm sienna
+    14: 0x22ccbb  // Travel & Adventure – turquoise
 };
 
 const galaxyTree = [
     {
-        title: "✨ Soul & Consciousness",
-        desc: "Relating to your own soul, intuition, and expanded states of awareness.",
+        title: "🌀✨ Soul, Consciousness & Integration",
+        desc: "Soul, intuition, and expanded awareness — and the inner work of healing and integration.",
         items: [
             "What My Soul Needs",
             "Listening to My Inner Voice",
@@ -138,7 +136,17 @@ const galaxyTree = [
             "Life as a Game",
             "Flirting with Life",
             "Not Taking It Too Seriously",
-            "Lightness of Being"
+            "Lightness of Being",
+            "Integrating Insights",
+            "Releasing Old Patterns",
+            "The Shadow as Teacher",
+            "Embracing Wholeness",
+            "Working with Fear",
+            "From Trauma to Wisdom",
+            "Self-Compassion",
+            "Grounding After Expansion",
+            "Honoring All Parts of Self",
+            "The Ongoing Healing Journey"
         ]
     },
     {
@@ -195,22 +203,6 @@ const galaxyTree = [
         ]
     },
     {
-        title: "🌀 Healing & Integration",
-        desc: "Integrating transformative experiences, releasing old patterns, and embracing wholeness.",
-        items: [
-            "Integrating Insights",
-            "Releasing Old Patterns",
-            "The Shadow as Teacher",
-            "Embracing Wholeness",
-            "Working with Fear",
-            "From Trauma to Wisdom",
-            "Self-Compassion",
-            "Grounding After Expansion",
-            "Honoring All Parts of Self",
-            "The Ongoing Healing Journey"
-        ]
-    },
-    {
         title: "💼 Work & Leadership",
         desc: "Leading, delegating, feedback, and pressure at work.",
         items: [
@@ -257,8 +249,8 @@ const galaxyTree = [
         ]
     },
     {
-        title: "💭 Philosophy",
-        desc: "The big questions — existence, mind, reality, ethics, and how to live well.",
+        title: "💭 Philosophy, Psychology & Sociology",
+        desc: "The big questions and the human mind — existence, ethics, behavior, and society.",
         items: [
             "The Meaning of Existence",
             "The Nature of Reality",
@@ -269,7 +261,15 @@ const galaxyTree = [
             "The Self & Identity",
             "Death & Impermanence",
             "Existentialism",
-            "Morality"
+            "Morality",
+            "Human Behavior",
+            "Why People Do What They Do",
+            "Cognition & The Mind",
+            "Social Dynamics",
+            "Group & Crowd Behavior",
+            "Attachment & Relationships",
+            "Cognitive Biases",
+            "Society & Culture"
         ]
     },
     {
@@ -325,20 +325,6 @@ const galaxyTree = [
             "Courage",
             "Curiosity",
             "Determination"
-        ]
-    },
-    {
-        title: "🧠 Psychology & Sociology",
-        desc: "Understanding people and society — why we think, feel, and behave the way we do.",
-        items: [
-            "Human Behavior",
-            "Why People Do What They Do",
-            "Cognition & The Mind",
-            "Social Dynamics",
-            "Group & Crowd Behavior",
-            "Attachment & Relationships",
-            "Cognitive Biases",
-            "Society & Culture"
         ]
     },
     {
