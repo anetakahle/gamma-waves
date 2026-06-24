@@ -384,9 +384,10 @@ function fibonacciSphere(i, n) {
 
 function layoutGalaxy(nodes, links) {
     const center = new THREE.Vector3(0, 0, -2600);
-    const innerR = 950;       // closest category (highest priority, near the core)
-    const outerR = 3500;      // farthest category (lowest priority)
-    const leafR = 360;        // leaves form a 3D cloud around each category
+    const coneLength = 2000;  // length of the pinecone along the priority axis (core → tip)
+    const coneWidth = 560;    // max radius from the axis (fatness of the šiška)
+    const leafR = 260;        // leaves form a tight 3D cloud around each category
+    const golden = Math.PI * (3 - Math.sqrt(5));  // golden angle
     const categoryIndices = [];
     nodes.forEach((n, i) => {
         if (n.kind === "center") {
@@ -395,13 +396,22 @@ function layoutGalaxy(nodes, links) {
             categoryIndices.push(i);
         }
     });
-    // Categories spiral outward by priority: rank 0 nearest the core, last rank farthest.
-    // Direction uses the golden angle so it reads as a flowing 3D spiral, never a straight line.
+    // Categories form a pinecone (šiška): a golden-angle spiral wrapping a tapered cone
+    // along a tilted priority axis — Soul at the tight core, Mathematics at the far tip.
+    const nCat = categoryIndices.length;
+    const axis = new THREE.Vector3(0.35, 0.22, -0.91).normalize();
+    const u = new THREE.Vector3().crossVectors(axis, new THREE.Vector3(0, 1, 0)).normalize();
+    const v = new THREE.Vector3().crossVectors(axis, u).normalize();
     categoryIndices.forEach((nodeIndex, c) => {
-        const dir = fibonacciSphere(c, categoryIndices.length);
-        const t = categoryIndices.length > 1 ? c / (categoryIndices.length - 1) : 0;
-        const r = innerR + (outerR - innerR) * t;
-        nodes[nodeIndex].position = center.clone().add(dir.multiplyScalar(r));
+        const t = nCat > 1 ? c / (nCat - 1) : 0;       // 0 = core, 1 = far tip
+        const phi = c * golden;                         // spiral around the axis
+        const taper = Math.sin(Math.PI * t);            // fat in the middle, narrow at the ends
+        const rho = coneWidth * (0.3 + 0.7 * taper);    // radius from the axis
+        const along = t * coneLength;                   // distance along the axis
+        const offset = axis.clone().multiplyScalar(along)
+            .add(u.clone().multiplyScalar(rho * Math.cos(phi)))
+            .add(v.clone().multiplyScalar(rho * Math.sin(phi)));
+        nodes[nodeIndex].position = center.clone().add(offset);
     });
     const leavesByCategory = new Map();
     links.forEach(([a, b]) => {
