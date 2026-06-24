@@ -384,9 +384,9 @@ function fibonacciSphere(i, n) {
 
 function layoutGalaxy(nodes, links) {
     const center = new THREE.Vector3(0, 0, -2600);
-    const coneLength = 2000;  // length of the pinecone along the priority axis (core → tip)
-    const coneWidth = 560;    // max radius from the axis (fatness of the šiška)
-    const leafR = 260;        // leaves form a tight 3D cloud around each category
+    const ballR = 1500;       // overall radius of the galaxy ball
+    const petalInner = 250;   // each category's elongated cluster starts near the core...
+    const petalSpread = 240;  // ...and this is its girth (fatness of the šiška petal)
     const golden = Math.PI * (3 - Math.sqrt(5));  // golden angle
     const categoryIndices = [];
     nodes.forEach((n, i) => {
@@ -396,22 +396,14 @@ function layoutGalaxy(nodes, links) {
             categoryIndices.push(i);
         }
     });
-    // Categories form a pinecone (šiška): a golden-angle spiral wrapping a tapered cone
-    // along a tilted priority axis — Soul at the tight core, Mathematics at the far tip.
+    // Each category is an elongated cluster (šiška) reaching from near the core out to the
+    // ball's surface in its own direction; together the interwoven petals fill a sphere.
     const nCat = categoryIndices.length;
-    const axis = new THREE.Vector3(0.35, 0.22, -0.91).normalize();
-    const u = new THREE.Vector3().crossVectors(axis, new THREE.Vector3(0, 1, 0)).normalize();
-    const v = new THREE.Vector3().crossVectors(axis, u).normalize();
+    const catDir = {};
     categoryIndices.forEach((nodeIndex, c) => {
-        const t = nCat > 1 ? c / (nCat - 1) : 0;       // 0 = core, 1 = far tip
-        const phi = c * golden;                         // spiral around the axis
-        const taper = Math.sin(Math.PI * t);            // fat in the middle, narrow at the ends
-        const rho = coneWidth * (0.3 + 0.7 * taper);    // radius from the axis
-        const along = t * coneLength;                   // distance along the axis
-        const offset = axis.clone().multiplyScalar(along)
-            .add(u.clone().multiplyScalar(rho * Math.cos(phi)))
-            .add(v.clone().multiplyScalar(rho * Math.sin(phi)));
-        nodes[nodeIndex].position = center.clone().add(offset);
+        const dir = fibonacciSphere(c, nCat);
+        catDir[nodeIndex] = dir;
+        nodes[nodeIndex].position = center.clone().add(dir.clone().multiplyScalar(ballR * 0.55));
     });
     const leavesByCategory = new Map();
     links.forEach(([a, b]) => {
@@ -424,13 +416,21 @@ function layoutGalaxy(nodes, links) {
     });
     // Leaves as a 3D spherical cloud around each category
     leavesByCategory.forEach((leafIdxs, catIdx) => {
-        const catPos = nodes[catIdx].position;
+        const dir = catDir[catIdx] || nodes[catIdx].position.clone().sub(center).normalize();
+        // perpendicular frame to the petal axis
+        const ref = Math.abs(dir.y) < 0.95 ? new THREE.Vector3(0, 1, 0) : new THREE.Vector3(1, 0, 0);
+        const u = new THREE.Vector3().crossVectors(dir, ref).normalize();
+        const v = new THREE.Vector3().crossVectors(dir, u).normalize();
         const count = leafIdxs.length;
         leafIdxs.forEach((leafIdx, j) => {
-            const dir = fibonacciSphere(j, count);
-            const bump = (j * 2.17) % 1;
-            const r = leafR * (0.7 + 0.5 * bump);
-            nodes[leafIdx].position = catPos.clone().add(dir.multiplyScalar(r));
+            const t = count > 1 ? j / (count - 1) : 0.5;   // 0 = near core, 1 = surface
+            const r = petalInner + (ballR - petalInner) * t;   // radius from center → fills the ball
+            const phi = j * golden;                            // twist around the petal axis
+            const girth = petalSpread * (0.35 + Math.sin(Math.PI * t));  // fat in middle → šiška
+            const offset = dir.clone().multiplyScalar(r)
+                .add(u.clone().multiplyScalar(Math.cos(phi) * girth))
+                .add(v.clone().multiplyScalar(Math.sin(phi) * girth));
+            nodes[leafIdx].position = center.clone().add(offset);
         });
     });
 }
@@ -453,7 +453,7 @@ controls.zoomSpeed = 0.9;
 controls.panSpeed = 0.6;
 controls.minDistance = 250;
 controls.maxDistance = 9000;
-camera.position.set(0, 700, 2600);         // initial framing of the cluster
+camera.position.set(0, 500, 1200);         // initial framing of the ball
 controls.update();
 
 // Starfield
