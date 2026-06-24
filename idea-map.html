@@ -384,11 +384,8 @@ function fibonacciSphere(i, n) {
 
 function layoutGalaxy(nodes, links) {
     const center = new THREE.Vector3(0, 0, -2600);
-    const ballR = 1500;       // overall radius of the galaxy ball
-    const petalLen = 380;     // radial length of each category's elongated petal (šiška)
-    const petalSpread = 220;  // girth of the petal
-    const orderInner = 150;   // innermost band — highest-priority category sits closest to the core
-    const golden = Math.PI * (3 - Math.sqrt(5));  // golden angle
+    const shellInner = 500;   // radius of the highest-priority category's shell (near core)
+    const shellOuter = 1500;  // radius of the lowest-priority category's shell (ball surface)
     const categoryIndices = [];
     nodes.forEach((n, i) => {
         if (n.kind === "center") {
@@ -397,19 +394,21 @@ function layoutGalaxy(nodes, links) {
             categoryIndices.push(i);
         }
     });
-    // Each category is an elongated petal (šiška) in its own direction. Higher-priority
-    // categories sit closer to the core, lower ones farther out — a gentle radial order —
-    // while the spread of directions keeps the whole a ball, only lightly interwoven.
+    // Gentle radial order: higher-priority categories sit on inner shells, lower ones farther
+    // out. Directions are SCATTERED (rank decorrelated from direction) so neither the inner nor
+    // the outer groups bunch up on one side of the ball.
     const nCat = categoryIndices.length;
     const catDir = {};
-    const catStart = {};
+    const catR = {};
+    const dirStep = 5;   // coprime with category count → scrambles direction vs. rank
     categoryIndices.forEach((nodeIndex, c) => {
-        const dir = fibonacciSphere(c, nCat);
+        const dirIndex = (c * dirStep) % nCat;
+        const dir = fibonacciSphere(dirIndex, nCat);
         const rankT = nCat > 1 ? c / (nCat - 1) : 0;
-        const start = orderInner + (ballR - petalLen - orderInner) * rankT;
+        const R = shellInner + (shellOuter - shellInner) * rankT;
         catDir[nodeIndex] = dir;
-        catStart[nodeIndex] = start;
-        nodes[nodeIndex].position = center.clone().add(dir.clone().multiplyScalar(start + petalLen * 0.5));
+        catR[nodeIndex] = R;
+        nodes[nodeIndex].position = center.clone().add(dir.clone().multiplyScalar(R));
     });
     const leavesByCategory = new Map();
     links.forEach(([a, b]) => {
@@ -421,23 +420,27 @@ function layoutGalaxy(nodes, links) {
         }
     });
     // Leaves as a 3D spherical cloud around each category
+    // Each category's leaves are a "snail trail" crawling across its shell: starting at the
+    // category's direction and curving tangentially over the sphere surface.
     leavesByCategory.forEach((leafIdxs, catIdx) => {
         const dir = catDir[catIdx] || nodes[catIdx].position.clone().sub(center).normalize();
-        const start = catStart[catIdx] != null ? catStart[catIdx] : 400;
-        // perpendicular frame to the petal axis
+        const R = catR[catIdx] != null ? catR[catIdx] : 1000;
         const ref = Math.abs(dir.y) < 0.95 ? new THREE.Vector3(0, 1, 0) : new THREE.Vector3(1, 0, 0);
         const u = new THREE.Vector3().crossVectors(dir, ref).normalize();
         const v = new THREE.Vector3().crossVectors(dir, u).normalize();
         const count = leafIdxs.length;
+        const arcSpan = 1.15;   // how far the trail crawls across the surface (radians)
+        const curveTurn = 1.9;  // how much the heading turns → the snail-trail curve
         leafIdxs.forEach((leafIdx, j) => {
-            const t = count > 1 ? j / (count - 1) : 0.5;   // 0 = inner end, 1 = outer end of the petal
-            const r = start + petalLen * t;                 // petal occupies its rank's radial band
-            const phi = j * golden;                            // twist around the petal axis
-            const girth = petalSpread * (0.35 + Math.sin(Math.PI * t));  // fat in middle → šiška
-            const offset = dir.clone().multiplyScalar(r)
-                .add(u.clone().multiplyScalar(Math.cos(phi) * girth))
-                .add(v.clone().multiplyScalar(Math.sin(phi) * girth));
-            nodes[leafIdx].position = center.clone().add(offset);
+            const t = count > 1 ? j / (count - 1) : 0;
+            const ang = t * arcSpan;                        // crawl angle away from the base direction
+            const psi = t * curveTurn;                       // heading rotates → curved trail
+            const axisJ = u.clone().multiplyScalar(Math.cos(psi))
+                .add(v.clone().multiplyScalar(Math.sin(psi))).normalize();
+            const leafDir = dir.clone().applyAxisAngle(axisJ, ang);
+            const bump = (j * 2.17) % 1;
+            const rr = R * (0.93 + 0.14 * bump);             // hug the shell with a little thickness
+            nodes[leafIdx].position = center.clone().add(leafDir.multiplyScalar(rr));
         });
     });
 }
