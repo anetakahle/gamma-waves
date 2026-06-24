@@ -101,16 +101,16 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 const CATEGORY_GROUP_COLORS = {
     0: 0xffd700,  // center – warm gold
     1: 0xaa55ff,  // Soul, Consciousness & Integration – deep violet
-    2: 0xff77aa,  // Love, Connection & Roots – warm rose
-    3: 0x88cc44,  // Body & Nature – forest green
-    4: 0xffaa44,  // Work & Leadership – warm amber
-    5: 0xff6644,  // Movement & Adventure – energetic orange-red
+    2: 0xee99bb,  // Values, Purpose & Lightness – dusty rose
+    3: 0xff77aa,  // Love, Connection & Roots – warm rose
+    4: 0x88cc44,  // Body & Nature – forest green
+    5: 0x33ccff,  // AI & Systems – electric blue
     6: 0xff55cc,  // Art & Aesthetics – magenta-pink
-    7: 0x6677dd,  // Philosophy, Psychology & Sociology – slate blue
-    8: 0x33ccff,  // AI & Systems – electric blue
-    9: 0x33ddaa,  // Mathematics – mint green
-    10: 0xffcc44, // Business & Independence – warm yellow
-    11: 0xee99bb  // Values, Purpose & Lightness – dusty rose
+    7: 0xffaa44,  // Work & Leadership – warm amber
+    8: 0xffcc44,  // Business & Independence – warm yellow
+    9: 0xff6644,  // Movement & Adventure – energetic orange-red
+    10: 0x6677dd, // Philosophy, Psychology & Sociology – slate blue
+    11: 0x33ddaa  // Mathematics – mint green
 };
 
 const galaxyTree = [
@@ -140,6 +140,23 @@ const galaxyTree = [
             "Grounding After Expansion",
             "Honoring All Parts of Self",
             "The Ongoing Healing Journey"
+        ]
+    },
+    {
+        title: "🌟 Values, Purpose & Lightness",
+        desc: "How I show up and why — the qualities I cultivate, my sense of purpose, and the lightness I carry through life.",
+        items: [
+            "Setting Boundaries",
+            "Compassion",
+            "Courage",
+            "Curiosity",
+            "Determination",
+            "Contribution vs. Achievement",
+            "Why I Am Here – My Mission",
+            "Serving Others",
+            "Life as a Game",
+            "Not Taking It Too Seriously",
+            "Lightness of Being"
         ]
     },
     {
@@ -183,37 +200,24 @@ const galaxyTree = [
         ]
     },
     {
-        title: "💼 Work & Leadership",
-        desc: "Leading, delegating, feedback, and pressure at work.",
+        title: "🤖 AI & Systems",
+        desc: "How machines think — the systems I build and the models underneath.",
         items: [
-            "Delegating Effectively",
-            "Guiding Underperformers",
-            "Fairness vs. Efficiency",
-            "Handling Poor Quality Work",
-            "Setting Clear Expectations",
-            "Giving & Receiving Feedback",
-            "Authority vs. Likability",
-            "Team Responsibility",
-            "Decision Making Under Pressure",
-            "Leadership Growth",
-            "Meaningful Work",
-            "Leading from Love"
-        ]
-    },
-    {
-        title: "🏔️ Movement & Adventure",
-        desc: "Strength, endurance, and adventure — finding calm in the chaos, on land, underwater, and out in the world.",
-        items: [
-            "CrossFit",
-            "Running",
-            "Martial Arts",
-            "Scuba Diving",
-            "Endurance & Discipline",
-            "Staying Calm Under Pressure",
-            "Clearing the Mental Cache",
-            "Travel",
-            "Adventure",
-            "New Cultures"
+            "Artificial Intelligence",
+            "Large Language Models (LLMs)",
+            "Agentic Orchestration",
+            "Multi-Agent Systems",
+            "RAG (Retrieval-Augmented Generation)",
+            "Context Engineering",
+            "Vector Databases",
+            "Knowledge Graphs",
+            "Knowledge Management",
+            "Prompt Engineering",
+            "Neural Networks & Transformers",
+            "Embeddings",
+            "Machine Learning",
+            "How Models Reason",
+            "AI & ML Research / Papers"
         ]
     },
     {
@@ -232,6 +236,55 @@ const galaxyTree = [
             "Inspiration",
             "Relaxing & Feeling the Flow",
             "A Keen Eye for Beauty"
+        ]
+    },
+    {
+        title: "💼 Work & Leadership",
+        desc: "Leading, delegating, feedback, and pressure at work.",
+        items: [
+            "Delegating Effectively",
+            "Guiding Underperformers",
+            "Fairness vs. Efficiency",
+            "Handling Poor Quality Work",
+            "Setting Clear Expectations",
+            "Giving & Receiving Feedback",
+            "Authority vs. Likability",
+            "Team Responsibility",
+            "Decision Making Under Pressure",
+            "Leadership Growth",
+            "Meaningful Work",
+            "Leading from Love"
+        ]
+    },
+    {
+        title: "🚀 Business & Independence",
+        desc: "Building my own thing — independence, brand, and reaching people.",
+        items: [
+            "Independence",
+            "Independent Contractor",
+            "Building a Business",
+            "Brand Building",
+            "Marketing",
+            "Content Creation",
+            "Storytelling",
+            "Building an Audience",
+            "Sharing Gifts and Knowledge"
+        ]
+    },
+    {
+        title: "🏔️ Movement & Adventure",
+        desc: "Strength, endurance, and adventure — finding calm in the chaos, on land, underwater, and out in the world.",
+        items: [
+            "CrossFit",
+            "Running",
+            "Martial Arts",
+            "Scuba Diving",
+            "Endurance & Discipline",
+            "Staying Calm Under Pressure",
+            "Clearing the Mental Cache",
+            "Travel",
+            "Adventure",
+            "New Cultures"
         ]
     },
     {
@@ -258,27 +311,6 @@ const galaxyTree = [
         ]
     },
     {
-        title: "🤖 AI & Systems",
-        desc: "How machines think — the systems I build and the models underneath.",
-        items: [
-            "Artificial Intelligence",
-            "Large Language Models (LLMs)",
-            "Agentic Orchestration",
-            "Multi-Agent Systems",
-            "RAG (Retrieval-Augmented Generation)",
-            "Context Engineering",
-            "Vector Databases",
-            "Knowledge Graphs",
-            "Knowledge Management",
-            "Prompt Engineering",
-            "Neural Networks & Transformers",
-            "Embeddings",
-            "Machine Learning",
-            "How Models Reason",
-            "AI & ML Research / Papers"
-        ]
-    },
-    {
         title: "📐 Mathematics",
         desc: "The math that powers it all.",
         items: [
@@ -286,38 +318,6 @@ const galaxyTree = [
             "Probability & Statistics",
             "Optimization",
             "Calculus"
-        ]
-    },
-    {
-        title: "🚀 Business & Independence",
-        desc: "Building my own thing — independence, brand, and reaching people.",
-        items: [
-            "Independence",
-            "Independent Contractor",
-            "Building a Business",
-            "Brand Building",
-            "Marketing",
-            "Content Creation",
-            "Storytelling",
-            "Building an Audience",
-            "Sharing Gifts and Knowledge"
-        ]
-    },
-    {
-        title: "🌟 Values, Purpose & Lightness",
-        desc: "How I show up and why — the qualities I cultivate, my sense of purpose, and the lightness I carry through life.",
-        items: [
-            "Setting Boundaries",
-            "Compassion",
-            "Courage",
-            "Curiosity",
-            "Determination",
-            "Contribution vs. Achievement",
-            "Why I Am Here – My Mission",
-            "Serving Others",
-            "Life as a Game",
-            "Not Taking It Too Seriously",
-            "Lightness of Being"
         ]
     }
 ];
@@ -384,8 +384,9 @@ function fibonacciSphere(i, n) {
 
 function layoutGalaxy(nodes, links) {
     const center = new THREE.Vector3(0, 0, -2600);
-    const categoryR = 1600;   // categories spread on a sphere shell around the center
-    const leafR = 440;        // leaves form a 3D cloud around each category
+    const innerR = 950;       // closest category (highest priority, near the core)
+    const outerR = 3500;      // farthest category (lowest priority)
+    const leafR = 360;        // leaves form a 3D cloud around each category
     const categoryIndices = [];
     nodes.forEach((n, i) => {
         if (n.kind === "center") {
@@ -394,10 +395,13 @@ function layoutGalaxy(nodes, links) {
             categoryIndices.push(i);
         }
     });
-    // Categories on a sphere around the center (volumetric, not a flat ring)
+    // Categories spiral outward by priority: rank 0 nearest the core, last rank farthest.
+    // Direction uses the golden angle so it reads as a flowing 3D spiral, never a straight line.
     categoryIndices.forEach((nodeIndex, c) => {
         const dir = fibonacciSphere(c, categoryIndices.length);
-        nodes[nodeIndex].position = center.clone().add(dir.multiplyScalar(categoryR));
+        const t = categoryIndices.length > 1 ? c / (categoryIndices.length - 1) : 0;
+        const r = innerR + (outerR - innerR) * t;
+        nodes[nodeIndex].position = center.clone().add(dir.multiplyScalar(r));
     });
     const leavesByCategory = new Map();
     links.forEach(([a, b]) => {
@@ -439,7 +443,7 @@ controls.zoomSpeed = 0.9;
 controls.panSpeed = 0.6;
 controls.minDistance = 250;
 controls.maxDistance = 9000;
-camera.position.set(0, 600, 1700);         // initial framing of the cluster
+camera.position.set(0, 700, 2600);         // initial framing of the cluster
 controls.update();
 
 // Starfield
