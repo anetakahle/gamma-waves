@@ -385,8 +385,9 @@ function fibonacciSphere(i, n) {
 function layoutGalaxy(nodes, links) {
     const center = new THREE.Vector3(0, 0, -2600);
     const ballR = 1500;       // overall radius of the galaxy ball
-    const petalInner = 250;   // each category's elongated cluster starts near the core...
-    const petalSpread = 240;  // ...and this is its girth (fatness of the šiška petal)
+    const petalLen = 380;     // radial length of each category's elongated petal (šiška)
+    const petalSpread = 220;  // girth of the petal
+    const orderInner = 150;   // innermost band — highest-priority category sits closest to the core
     const golden = Math.PI * (3 - Math.sqrt(5));  // golden angle
     const categoryIndices = [];
     nodes.forEach((n, i) => {
@@ -396,14 +397,19 @@ function layoutGalaxy(nodes, links) {
             categoryIndices.push(i);
         }
     });
-    // Each category is an elongated cluster (šiška) reaching from near the core out to the
-    // ball's surface in its own direction; together the interwoven petals fill a sphere.
+    // Each category is an elongated petal (šiška) in its own direction. Higher-priority
+    // categories sit closer to the core, lower ones farther out — a gentle radial order —
+    // while the spread of directions keeps the whole a ball, only lightly interwoven.
     const nCat = categoryIndices.length;
     const catDir = {};
+    const catStart = {};
     categoryIndices.forEach((nodeIndex, c) => {
         const dir = fibonacciSphere(c, nCat);
+        const rankT = nCat > 1 ? c / (nCat - 1) : 0;
+        const start = orderInner + (ballR - petalLen - orderInner) * rankT;
         catDir[nodeIndex] = dir;
-        nodes[nodeIndex].position = center.clone().add(dir.clone().multiplyScalar(ballR * 0.55));
+        catStart[nodeIndex] = start;
+        nodes[nodeIndex].position = center.clone().add(dir.clone().multiplyScalar(start + petalLen * 0.5));
     });
     const leavesByCategory = new Map();
     links.forEach(([a, b]) => {
@@ -417,14 +423,15 @@ function layoutGalaxy(nodes, links) {
     // Leaves as a 3D spherical cloud around each category
     leavesByCategory.forEach((leafIdxs, catIdx) => {
         const dir = catDir[catIdx] || nodes[catIdx].position.clone().sub(center).normalize();
+        const start = catStart[catIdx] != null ? catStart[catIdx] : 400;
         // perpendicular frame to the petal axis
         const ref = Math.abs(dir.y) < 0.95 ? new THREE.Vector3(0, 1, 0) : new THREE.Vector3(1, 0, 0);
         const u = new THREE.Vector3().crossVectors(dir, ref).normalize();
         const v = new THREE.Vector3().crossVectors(dir, u).normalize();
         const count = leafIdxs.length;
         leafIdxs.forEach((leafIdx, j) => {
-            const t = count > 1 ? j / (count - 1) : 0.5;   // 0 = near core, 1 = surface
-            const r = petalInner + (ballR - petalInner) * t;   // radius from center → fills the ball
+            const t = count > 1 ? j / (count - 1) : 0.5;   // 0 = inner end, 1 = outer end of the petal
+            const r = start + petalLen * t;                 // petal occupies its rank's radial band
             const phi = j * golden;                            // twist around the petal axis
             const girth = petalSpread * (0.35 + Math.sin(Math.PI * t));  // fat in middle → šiška
             const offset = dir.clone().multiplyScalar(r)
